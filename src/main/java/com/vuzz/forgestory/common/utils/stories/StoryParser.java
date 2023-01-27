@@ -21,6 +21,8 @@ public class StoryParser {
     //public static FilenameFilter storiesFolderFilter = (dir, name) -> name.equals("stories") && dir.isDirectory();
     public static FileFilter onlyDir = File::isDirectory;
 
+    public static String currentStory = "";
+
     @SuppressWarnings("all")
     public static void loadStories(ServerPlayerEntity player) {
         Path folderPath = Objects.requireNonNull(player.level.getServer()).getWorldPath(FolderName.ROOT);

@@ -8,10 +8,14 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.ScriptableObject;
 
+import com.vuzz.forgestory.common.utils.js.JSBlocks;
 import com.vuzz.forgestory.common.utils.js.JSPlayer;
+import com.vuzz.forgestory.common.utils.js.JSScriptFunctions;
 import com.vuzz.forgestory.common.utils.js.JSStory;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraftforge.common.ForgeConfig.Client;
 
 public class StoryScript {
 
@@ -31,10 +35,14 @@ public class StoryScript {
         ScriptableObject scope = ctx.initStandardObjects();
 
         JSStory storyJS = new JSStory(story);
-        
-        ScriptableObject.putConstProperty(scope, "out",System.out);
+        JSPlayer playerJS = new JSPlayer(player,storyJS);
+
         ScriptableObject.putConstProperty(scope, "story",storyJS);
-        ScriptableObject.putConstProperty(scope, "player",new JSPlayer(player,storyJS));
+        ScriptableObject.putConstProperty(scope, "player",playerJS);
+        ScriptableObject.putConstProperty(scope, "blocks", new JSBlocks(player));
+        ScriptableObject.putConstProperty(scope, "api", new JSScriptFunctions(storyJS, playerJS));
+        ScriptableObject.putConstProperty(scope, "mc", Minecraft.getInstance());
+
         System.out.println("Running script: "+scriptId);
         try {
             ctx.evaluateReader(scope, new FileReader(scriptCode), null,1,null);
@@ -42,5 +50,6 @@ public class StoryScript {
             e.printStackTrace();
         }
     }
+
 
 }

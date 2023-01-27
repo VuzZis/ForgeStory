@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -14,7 +15,7 @@ public class JSPlayer {
     
     public final ServerPlayerEntity entity;
     public final JSStory story;
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public JSPlayer(ServerPlayerEntity player, JSStory story) {
         entity = player;
