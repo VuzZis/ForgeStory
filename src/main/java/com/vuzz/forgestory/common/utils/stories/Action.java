@@ -7,10 +7,12 @@ public class Action {
     
     public Consumer<Scene> action;
     public final Scene scene;
+    public boolean breakAfter = true;
 
-    public Action(Scene scene, Consumer<Scene> callback) {
+    public Action(Scene scene, Consumer<Scene> callback, boolean breakA) {
         this.scene = scene;
         action = callback;
+        breakAfter = breakA;
     }
 
     public void playAction() {

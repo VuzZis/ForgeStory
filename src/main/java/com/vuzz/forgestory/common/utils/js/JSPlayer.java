@@ -22,6 +22,36 @@ public class JSPlayer {
         this.story = story;
     }
 
+    public double getX() {
+        return entity.getX();
+    }
+    public double getY() {
+        return entity.getY();
+    }
+    public double getZ() {
+        return entity.getZ();
+    }
+
+    public void setX(double x) {
+        entity.setPos(x,getY(),getZ());
+    }
+
+    public void setY(double y) {
+        entity.setPos(getX(),y,getZ());
+    }
+
+    public void setZ(double z) {
+        entity.setPos(getX(),getY(),z);
+    }
+
+    public void setPos(double x, double y, double z) {
+        entity.setPos(x, y, z);
+    }
+
+    public double[] getPos() {
+        return new double[] {getX(),getY(),getZ()};
+    }
+
     public void writeData(String key, Object val) {
         File dataFile = new File(story.story.storyFile,"data");
         dataFile.mkdir();

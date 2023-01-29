@@ -1,15 +1,20 @@
 package com.vuzz.forgestory.common.utils.stories;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import org.mozilla.javascript.ClassShutter;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.ScriptableObject;
 
 import com.vuzz.forgestory.common.utils.js.JSBlocks;
 import com.vuzz.forgestory.common.utils.js.JSPlayer;
+import com.vuzz.forgestory.common.utils.js.JSScene;
 import com.vuzz.forgestory.common.utils.js.JSScriptFunctions;
 import com.vuzz.forgestory.common.utils.js.JSStory;
 
@@ -23,6 +28,10 @@ public class StoryScript {
     public File scriptCode;
     public Story story;
 
+    public Context ctx;
+    public ScriptableObject scope;
+
+    public int ticks;
 
     public StoryScript(String id,File code,Story storyC) {
         scriptId = id;
@@ -30,10 +39,16 @@ public class StoryScript {
         story = storyC;
     }
 
-    public void runScript(ServerPlayerEntity player) {
-        Context ctx = Context.enter();
-        ScriptableObject scope = ctx.initStandardObjects();
+    private ServerPlayerEntity player;
+    private boolean tickBroken = false;
+    private boolean defaultBroken = false;
 
+    public void runScript(ServerPlayerEntity player,Scene scene) {
+        if(defaultBroken) return;
+        ctx = Context.enter();
+        this.player = player;
+        scope = ctx.initStandardObjects();
+        ticks = 0;
         JSStory storyJS = new JSStory(story);
         JSPlayer playerJS = new JSPlayer(player,storyJS);
 
@@ -42,12 +57,36 @@ public class StoryScript {
         ScriptableObject.putConstProperty(scope, "blocks", new JSBlocks(player));
         ScriptableObject.putConstProperty(scope, "api", new JSScriptFunctions(storyJS, playerJS));
         ScriptableObject.putConstProperty(scope, "mc", Minecraft.getInstance());
+        ScriptableObject.putConstProperty(scope, "server",playerJS.entity.level.getServer());
+        ScriptableObject.putConstProperty(scope, "scene", new JSScene(scene));
+        ScriptableObject.putConstProperty(scope, "ticker_ticks", GlobalTicker.ticks);
+        ScriptableObject.putConstProperty(scope, "ticker_paused", GlobalTicker.paused);
 
         System.out.println("Running script: "+scriptId);
         try {
-            ctx.evaluateReader(scope, new FileReader(scriptCode), null,1,null);
+            BufferedReader reader = Files.newBufferedReader(scriptCode.toPath(), StandardCharsets.UTF_8);
+            ctx.evaluateReader(scope, reader, "a",1,null);
+        
         } catch(Exception e) {
             e.printStackTrace();
+            defaultBroken = true;
+            new JSScriptFunctions(storyJS,playerJS).error(e.getMessage()+" :other");
+        }
+    }
+
+    public void tick() {
+        Function tick  = (Function) scope.get("tick",scope);
+        if(tick == null) return;
+        if(tickBroken) return;
+        try {
+            tick.call(ctx, scope,scope, new Object[] {ticks});
+            ticks++;
+        } catch(Exception e) {
+            e.printStackTrace();
+            JSStory storyJS = new JSStory(story);
+            JSPlayer playerJS = new JSPlayer(player,storyJS);
+            new JSScriptFunctions(storyJS,playerJS).error(e.getMessage()+" :tick()");
+            tickBroken = true;
         }
     }
 

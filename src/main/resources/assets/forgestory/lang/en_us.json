@@ -1,0 +1,5 @@
+{
+    "error" : "§c",
+    "message.forgestory.storyunselected" : "[§6ForgeStory§r] Welcome! This world contains mod §6ForgeStory§r, so to start playing/creating your story, select it with command §c/setstory 'story_id'§r",
+    "message.forgestory.noavailablestories" : "[§6ForgeStory§r] It seems that you haven't got any stories in your §csaves/yourworld/stories§r folder.. You can add some by §ccreating your own, or downloading from internet§r!"
+}

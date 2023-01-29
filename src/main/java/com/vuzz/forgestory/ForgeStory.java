@@ -1,9 +1,14 @@
 package com.vuzz.forgestory;
 
+import net.minecraft.client.gui.widget.list.KeyBindingList;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.settings.IKeyConflictContext;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -32,9 +37,11 @@ public class ForgeStory {
         StoryItems.register(eventBus);
     }
 
+    public static KeyBinding keyStory = new KeyBinding("Play Action", InputMappings.Type.KEYSYM, 72, MOD_ID);
+
     private void doClientStuff(final FMLClientSetupEvent event) {
+        ClientRegistry.registerKeyBinding(keyStory);
         event.enqueueWork(() -> {
-        
         });
     }
 

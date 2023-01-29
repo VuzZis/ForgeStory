@@ -18,6 +18,7 @@ public class StoryItems {
     public static DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS,MOD_ID);
 
     public static RegistryObject<Item> NPC_CREATOR = localSetup("npc_creator", itemNpcCreator::new,true);
+    public static RegistryObject<Item> STORY_REFRESHER = localSetup("story_refresher", itemStoryRefresher::new,true);
 
     private static RegistryObject<Item> localSetup(String id, Supplier<? extends Item> supp, boolean isExperimental) {
         if(!VarsUtils.IS_EXPERIMENTAL && isExperimental)

@@ -2,6 +2,8 @@ package com.vuzz.forgestory.common.items.instruments;
 
 import com.vuzz.forgestory.common.items.CustomItem;
 import com.vuzz.forgestory.common.utils.VarsUtils;
+import com.vuzz.forgestory.common.utils.stories.GlobalTicker;
+import com.vuzz.forgestory.common.utils.stories.Scene;
 import com.vuzz.forgestory.common.utils.stories.Story;
 import com.vuzz.forgestory.common.utils.stories.StoryParser;
 import com.vuzz.forgestory.common.utils.stories.StoryScript;
@@ -26,12 +28,12 @@ public class itemNpcCreator extends CustomItem {
     }
 
     public ActionResultType onItemUseFirstServer(ItemStack stack, ItemUseContext context) {
-        StoryParser.loadStories((ServerPlayerEntity) context.getPlayer());
-        Story story = StoryParser.getStory("test");
+        Story story = StoryParser.getStory("template");
         if(story != null) {
-            StoryScript script = story.getScript("arbuz.js");
-            if(script != null) {
-                script.runScript((ServerPlayerEntity) context.getPlayer());
+            Scene scene = story.getScene("starter");
+            if(scene != null) {
+                scene.invalidateScripts();
+                scene.start((ServerPlayerEntity) context.getPlayer());
             }
         }
         return ActionResultType.PASS;
