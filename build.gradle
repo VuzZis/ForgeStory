@@ -75,9 +75,14 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+repositories {
+        maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+}
+
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
     library 'org.mozilla:rhino:1.7.14'
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.106')
 }
 
 jar {

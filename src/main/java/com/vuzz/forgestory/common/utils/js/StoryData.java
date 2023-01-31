@@ -5,4 +5,6 @@ import java.util.Map;
 
 public class StoryData {
     public final Map<String,Object> storyScriptVariables = new HashMap<>();
+    public int timerVal = 0;
+    public String queuedScene = "starter";
 }

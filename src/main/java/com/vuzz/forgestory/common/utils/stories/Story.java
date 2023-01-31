@@ -1,10 +1,16 @@
 package com.vuzz.forgestory.common.utils.stories;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
+
+import com.google.gson.Gson;
+import com.vuzz.forgestory.common.utils.js.StoryData;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 
@@ -22,12 +28,17 @@ public class Story {
 
     public ServerPlayerEntity player;
 
+    private Gson gson = StoryParser.gson;
+
     public Story(String id, File file, ServerPlayerEntity player) {
         storyId = id;
         storyFile = file;
         this.player = player;
         reloadScripts();
         reloadScenes();
+        sceneTimer = readTimer();
+        sceneInQueue = readNextScene();
+        queueScene(sceneInQueue, sceneTimer);
     }
 
     public void reloadScripts() {
@@ -44,6 +55,7 @@ public class Story {
 
     public void tick() {
         if(sceneTimer > 0) sceneTimer--;
+        if(sceneTimer % 10 == 0 && sceneTimer != 0) saveTimer();
         if(sceneTimer == 0) {
             Scene scene = getScene(sceneInQueue);
             if(scene != null) {
@@ -51,6 +63,88 @@ public class Story {
                 sceneTimer = -1;
             }
         }
+    }
+
+    public void saveTimer() {
+        setTimer(sceneTimer);
+    }
+
+    public void setTimer(int ticks) {
+        File dataFile = new File(storyFile,"data");
+        dataFile.mkdir();
+        File storyDataFile = new File(dataFile,"story.json");
+        try {
+            storyDataFile.createNewFile();
+            StoryData playerData = gson.fromJson(new FileReader(storyDataFile),StoryData.class);
+            if(playerData == null) playerData = new StoryData();
+            playerData.timerVal = ticks;
+            FileWriter fileWriter = new FileWriter(storyDataFile);
+            gson.toJson(playerData,fileWriter);
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+    }
+
+    public void setNextScene(String scene) {
+        File dataFile = new File(storyFile,"data");
+        dataFile.mkdir();
+        File storyDataFile = new File(dataFile,"story.json");
+        try {
+            storyDataFile.createNewFile();
+            StoryData playerData = gson.fromJson(new FileReader(storyDataFile),StoryData.class);
+            if(playerData == null) playerData = new StoryData();
+            playerData.queuedScene = scene;
+            FileWriter fileWriter = new FileWriter(storyDataFile);
+            gson.toJson(playerData,fileWriter);
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+    }
+
+    public int readTimer() {
+        File dataFile = new File(storyFile,"data");
+        dataFile.mkdir();
+        File playerDataFile = new File(dataFile,"story.json");
+        try {
+            playerDataFile.createNewFile();
+            StoryData playerData = gson.fromJson(new FileReader(playerDataFile),StoryData.class);
+            if(playerData == null) playerData = new StoryData();
+            FileWriter fileWriter = new FileWriter(playerDataFile);
+            gson.toJson(playerData,fileWriter);
+            fileWriter.close();
+            return playerData.timerVal;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public String readNextScene() {
+        File dataFile = new File(storyFile,"data");
+        dataFile.mkdir();
+        File playerDataFile = new File(dataFile,"story.json");
+        try {
+            playerDataFile.createNewFile();
+            StoryData playerData = gson.fromJson(new FileReader(playerDataFile),StoryData.class);
+            if(playerData == null) playerData = new StoryData();
+            FileWriter fileWriter = new FileWriter(playerDataFile);
+            gson.toJson(playerData,fileWriter);
+            fileWriter.close();
+            return playerData.queuedScene;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "starter";
+    }
+
+    public void queueScene(String scene, double timeInSecs) {
+        sceneInQueue = scene;
+        sceneTimer = (int) Math.round((timeInSecs*20));
+        setNextScene(scene);
     }
 
     public void reloadScenes() {
@@ -84,6 +178,7 @@ public class Story {
     @Nullable
     public StoryScript getScript(String id) {
         for(StoryScript script:storyScripts) {
+            if(script == null) continue;
             if(script.scriptId.equals(id)) return script;
         }
         return null;
@@ -91,8 +186,8 @@ public class Story {
 
     @Nullable
     public Scene getScene(String id) {
-        System.out.println("Finding SC:"+id+"..");
         for(Scene scene:storyScenes) {
+            if(scene == null) continue;
             if(scene.sceneData.sceneId.equals(id)) return scene;
         }
         System.out.println("SC:"+id+" not found!");

@@ -77,6 +77,10 @@ public class Scene {
         }
     }
 
+    public void queueScene(String scene, int timeInSecs) {
+        
+    }
+
     public void loadScript(String script,ServerPlayerEntity player) {
         StoryScript sscript = story.getScript(script);
         if(sscript != null) {
@@ -103,6 +107,7 @@ public class Scene {
 
             case "js":
                 loadScript(sceneData.scriptId, player);
+                playAction();
             break;
 
             case "ext":
@@ -153,6 +158,11 @@ public class Scene {
             break;
             case "placeholder":
                 addAction((e) -> {},breakA);
+            break;
+            case "delay_scene":
+                double delayedBy = (double) data.get("delay");
+                String sceneId = (String) data.get("sceneId");
+                addAction((e) -> story.queueScene(sceneId, delayedBy), breakA);
             break;
             case "end":
                 addAction((e) -> this.end(),breakA);

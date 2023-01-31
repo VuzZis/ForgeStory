@@ -12,6 +12,9 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import software.bernie.geckolib3.GeckoLib;
+
+import com.vuzz.forgestory.common.entities.StoryEntities;
 import com.vuzz.forgestory.common.items.StoryItems;
 
 @Mod(ForgeStory.MOD_ID)
@@ -30,11 +33,14 @@ public class ForgeStory {
 
         register(eventBus);
 
+        GeckoLib.initialize();
+
         eventBus.addListener(this::doClientStuff);
     }
 
     public void register(IEventBus eventBus) {
         StoryItems.register(eventBus);
+        StoryEntities.register(eventBus);
     }
 
     public static KeyBinding keyStory = new KeyBinding("Play Action", InputMappings.Type.KEYSYM, 72, MOD_ID);

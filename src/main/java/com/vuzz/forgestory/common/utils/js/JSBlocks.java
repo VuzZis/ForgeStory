@@ -22,4 +22,8 @@ public class JSBlocks {
         ), Util.NIL_UUID);
     }
 
+    public void queueScene(JSStory story, String sceneId, int delay) {
+        story.story.queueScene(sceneId, delay);
+    }
+
 }

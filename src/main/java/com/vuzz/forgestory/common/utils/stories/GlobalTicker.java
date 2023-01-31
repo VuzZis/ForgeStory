@@ -12,6 +12,7 @@ public class GlobalTicker {
 
     public static void tick() {
         if(paused) return;
+        StoryParser.tick();
         for (Scene scene : loadedScenes) {
             if(scene != null) scene.tick();
         }

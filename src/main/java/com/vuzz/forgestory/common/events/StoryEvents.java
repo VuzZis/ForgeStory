@@ -11,14 +11,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.client.event.GuiScreenEvent.KeyboardKeyPressedEvent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 @Mod.EventBusSubscriber(modid = ForgeStory.MOD_ID)
 public class StoryEvents {
@@ -39,14 +38,16 @@ public class StoryEvents {
                     }
                 }
             }
+
         }
     }
 
     @SubscribeEvent
     public static void playerJoined(PlayerLoggedInEvent event) {
-        PlayerEntity player = (PlayerEntity) event.getEntity();
-        World world = player.level;
-        if(world.isClientSide) return;
+        playerDelayedJoin(event.getPlayer());
+    }
+    
+    public static void playerDelayedJoin(PlayerEntity player) {
         StoryParser.loadStories((ServerPlayerEntity) player);
         String selectedStory = StoryParser.currentStory;
         if(selectedStory == "") {
@@ -56,5 +57,7 @@ public class StoryEvents {
             player.sendMessage(new StringTextComponent(VarsUtils.trans("message.forgestory.noavailablestories")), Util.NIL_UUID);
         }
     }
+
+
 
 }

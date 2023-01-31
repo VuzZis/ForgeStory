@@ -2,6 +2,7 @@ package com.vuzz.forgestory.common.utils.stories;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.storage.FolderName;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -34,9 +35,11 @@ public class StoryParser {
 
     public static String currentStory = "";
 
+    public static ServerPlayerEntity player;
+
     @SuppressWarnings("all")
-    public static void loadStories(ServerPlayerEntity player) {
-        Path folderPath = Objects.requireNonNull(player.level.getServer()).getWorldPath(FolderName.ROOT);
+    public static void loadStories(ServerPlayerEntity playerA) {
+        Path folderPath = Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer()).getWorldPath(FolderName.ROOT);
         File folderFile = folderPath.toFile();
         File storiesFolder = new File(folderFile,"stories");
         storiesFolder.mkdir();
@@ -45,13 +48,14 @@ public class StoryParser {
         System.out.println("Reloading Stories folder..");
         for(File story:stories) {
             System.out.println("Story found: "+story.getName());
-            parseStory(story,player);
+            parseStory(story,playerA);
         }
-        currentStory = getCurStory(player);
+        currentStory = getCurStory(playerA);
+        player = playerA;
     }
 
     public static void setCurStory(String story, ServerPlayerEntity player) {
-        Path folderPath = Objects.requireNonNull(player.level.getServer()).getWorldPath(FolderName.ROOT);
+        Path folderPath = Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer()).getWorldPath(FolderName.ROOT);
         File folderFile = folderPath.toFile();
         File storiesFolder = new File(folderFile,"stories");
         storiesFolder.mkdir();
@@ -71,7 +75,7 @@ public class StoryParser {
     }
 
     public static String getCurStory(ServerPlayerEntity player) {
-        Path folderPath = Objects.requireNonNull(player.level.getServer()).getWorldPath(FolderName.ROOT);
+        Path folderPath = Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer()).getWorldPath(FolderName.ROOT);
         File folderFile = folderPath.toFile();
         File storiesFolder = new File(folderFile,"stories");
         storiesFolder.mkdir();
@@ -91,6 +95,15 @@ public class StoryParser {
         return story;
     }
 
+    public static int ticks = 0;
+
+    public static void tick() {
+        if(currentStory == "") return;
+        Story story = getStory(currentStory);
+        if(story == null) return;
+        story.tick();
+    }
+
     public static void parseStory(File fileStory, ServerPlayerEntity player) {
         Story story = new Story(fileStory.getName(),fileStory,player);
         storiesLoaded.add(story);
@@ -98,8 +111,8 @@ public class StoryParser {
 
     @Nullable
     public static Story getStory(String id) {
-        System.out.println("Finding S:"+id+"..");
         for(Story story:storiesLoaded) {
+            if(story == null) continue;
             if(story.storyId.equals(id)) return story;
         }
         System.out.println(id+" not found!");
