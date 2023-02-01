@@ -12,9 +12,15 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -25,48 +31,33 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class NPCEntity extends MobEntity implements IAnimatable {
+
     private AnimationFactory anFactory = new AnimationFactory(this);
 
     private final NonNullList<ItemStack> armorInv = NonNullList.withSize(4, ItemStack.EMPTY);
 
     private final String[] facesAnims = new String[] {
-        "animation.npc.default",
-        "animation.npc.sad",
-        "animation.npc.happy",
-        "animation.npc.wow",
-        "animation.npc.terrified",
-        "animation.npc.angry",
-        "animation.npc.sus",
-        "animation.npc.smug",
-        "animation.npc.eyebrow_raise"
+        "animation.npcsteve.blinking",
+        "animation.npcsteve.happy",
+        "animation.npcsteve.angry",
+        "animation.npcsteve.sad",
+        "animation.npcsteve.terrified",
+        "animation.npcsteve.smug"
     };
 
-    public enum Faces {
+    public final String texturePath = "forgestory:textures/entity/npc.png";
+    public final String name = "NPC";
 
-        DEFAULT(0),
-        SAD(1),
-        HAPPY(2),
-        WOW(3),
-        TERRIFIED(4),
-        ANGRY(5),
-        SUSPICIOUS(6),
-        SMUG(7),
-        EYEBROW_RAISE(8);
+    public final double[] goTo = new double[] {
+        0,0,0
+    };
 
-        private int index = 0;
-        private Faces(int ind) {
-            this.index = ind;
-        }
-        public int ind() {
-            return this.index;
-        }
+    public final double speed = 1D;
 
-    }
-
-    public Faces curFace = Faces.DEFAULT;
+    public final int curFace = 0;
 
     public int ticks = 0;
-    public boolean followPl = true;
+    public boolean followPl = false;
     public boolean immortal = true;
 
     public NPCEntity(EntityType<? extends MobEntity> type, World world) {
@@ -89,13 +80,23 @@ public class NPCEntity extends MobEntity implements IAnimatable {
 
     @Override
     public void tick() {
+        super.tick();
         if(hasPlayerAround(15)) {
             PlayerEntity player = getPlayerAround(15);
             if (ticks % 20 == 0) lookAt(Type.EYES,new Vector3d(player.getX(),player.getY(),player.getZ()));
         }
+        setCustomName(new StringTextComponent(getNName()));
+        setCustomNameVisible(false);
         if(followPl) followPlayer();
+        else {
+            getNavigation().moveTo(
+                getGoTo().getX(),
+                getGoTo().getY(),
+                getGoTo().getZ(),
+                getNSpeed()
+            );
+        }
         if(immortal) setHealth(20);
-        super.tick();
         ticks++;
     }
 
@@ -110,20 +111,20 @@ public class NPCEntity extends MobEntity implements IAnimatable {
         event.getController().transitionLengthTicks = 5;
         if (event.isMoving()) {
             AnimationBuilder face = new AnimationBuilder()
-                .loop("animation.npc.walking");
+                .loop("animation.npcsteve.walk");
             event.getController().setAnimation(face);
             return PlayState.CONTINUE;
         }
         AnimationBuilder face = new AnimationBuilder()
-            .loop("animation.npc.idle");
+            .loop("animation.npcsteve.idle");
         event.getController().setAnimation(face);
         return PlayState.CONTINUE;
     }
 
     private <E extends IAnimatable> PlayState predicateFace(AnimationEvent<E> event) {
-        event.getController().transitionLengthTicks = 5;
+        event.getController().transitionLengthTicks = 3;
         AnimationBuilder face = new AnimationBuilder()
-            .loop(facesAnims[curFace.ind()]);
+            .loop(facesAnims[curFace]);
         event.getController().setAnimation(face);
         return PlayState.CONTINUE;
     }
@@ -151,6 +152,45 @@ public class NPCEntity extends MobEntity implements IAnimatable {
     @Override
     public void setItemSlot(EquipmentSlotType arg0, ItemStack arg1) {
 
+    }
+
+    public String getTexture() { 
+        return 
+        getPersistentData().getString("texturePath") == "" 
+        ? texturePath 
+        : getPersistentData().getString("texturePath"); 
+    }
+    public void setTexture(String text) { getPersistentData().putString("texturePath",text);}
+
+    public String getNName() { 
+        return 
+        getPersistentData().getString("nname") == "" 
+        ? name
+        : getPersistentData().getString("nname"); 
+    }
+    public void setNName(String text) { getPersistentData().putString("nname", text);;}
+
+    public float getNSpeed() {
+        return 
+        getPersistentData().getFloat("speed") == 0F
+        ? (float) speed
+        : getPersistentData().getFloat("speed"); 
+    }
+    public void setNSpeed(float speed) { getPersistentData().putFloat("speed", speed);;}
+
+    public int getFace() {return getPersistentData().getInt("face");}
+    public void setFace(int face) { getPersistentData().putInt("face", face);;}
+
+    public BlockPos getGoTo() { 
+        return new BlockPos(
+            getPersistentData().getDouble("gX"),
+            getPersistentData().getDouble("gY"),
+            getPersistentData().getDouble("gZ")); 
+        }
+    public void setGoTo(BlockPos pos) { 
+        getPersistentData().putDouble("gX",pos.getX());
+        getPersistentData().putDouble("gY",pos.getY());
+        getPersistentData().putDouble("gZ",pos.getZ());
     }
 
     public PlayerEntity getPlayerAround(int radius) {

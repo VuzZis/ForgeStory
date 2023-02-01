@@ -6,6 +6,8 @@ import java.util.function.Consumer;
 import com.vuzz.forgestory.common.utils.stories.GlobalTicker;
 import com.vuzz.forgestory.common.utils.stories.Scene;
 
+import net.minecraft.world.World;
+
 public class JSScene {
     public final Scene scene;
     public JSScene(Scene scene) {
@@ -25,6 +27,18 @@ public class JSScene {
 
     public void addAction(Consumer<Scene> callback,boolean breakA) {
         scene.addAction(callback,breakA);
+    }
+
+    public void createNpc(World world, String id, String name, String texture, double[] pos) {
+        scene.createNpc(world, id, name, texture, pos);
+    }
+
+    public JSNpc getNpc(String id) {
+        return scene.getNpc(id);
+    }
+
+    public void destroyNpc(String id) {
+        scene.destroyNpc(id);
     }
 
 }

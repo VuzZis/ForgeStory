@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -20,13 +21,22 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
+import com.vuzz.forgestory.common.entities.NPCEntity;
+import com.vuzz.forgestory.common.entities.StoryEntities;
 import com.vuzz.forgestory.common.utils.js.JSBlocks;
+import com.vuzz.forgestory.common.utils.js.JSNpc;
 import com.vuzz.forgestory.common.utils.js.JSPlayer;
 import com.vuzz.forgestory.common.utils.js.JSScriptFunctions;
 import com.vuzz.forgestory.common.utils.js.JSStory;
 import com.vuzz.forgestory.common.utils.js.SceneData;
 
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class Scene {
 
@@ -44,10 +54,34 @@ public class Scene {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private final List<StoryScript> loadedScripts = new ArrayList<>();
+    private final Map<String,JSNpc> localNpcs = new HashMap<>();
 
     public Scene(File file, Story story) {
         sceneFile = file;
         this.story = story;
+    }
+
+    public void createNpc(World world, String id, String name, String texture, double[] pos) {
+        EntityType<NPCEntity>npc = StoryEntities.NPC.get();
+        NPCEntity npcEntity = (NPCEntity) npc.spawn((ServerWorld) world, ItemStack.EMPTY, null, new BlockPos(pos[0],pos[1],pos[2]), 
+            SpawnReason.DISPENSER, false, false);
+        if(npcEntity == null) return;
+        npcEntity.setTexture(texture);
+        npcEntity.setNName(name);
+        npcEntity.setGoTo(new BlockPos(pos[0],pos[1],pos[2]));
+        localNpcs.put(id,new JSNpc(npcEntity));
+    }
+
+    public JSNpc getNpc(String id) {
+        JSNpc npc = localNpcs.get(id);
+        return npc;
+    }
+
+    public void destroyNpc(String id) {
+        JSNpc npc = localNpcs.get(id);
+        if(npc == null) return;
+        npc.entity.remove();
+        localNpcs.remove(id,npc);
     }
 
     public void construct() {
@@ -95,8 +129,10 @@ public class Scene {
     }
 
     int index = 0;
+    public ServerPlayerEntity player;
 
     public void start(ServerPlayerEntity player) {
+        this.player = player;
         blocks = new JSBlocks(player);
         JSStory stor = new JSStory(story);
         JSPlayer pla = new JSPlayer(player, stor);

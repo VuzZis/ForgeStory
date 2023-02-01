@@ -9,11 +9,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.settings.IKeyConflictContext;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import software.bernie.geckolib3.GeckoLib;
 
+import com.vuzz.forgestory.client.renderers.NPCRenderer;
 import com.vuzz.forgestory.common.entities.StoryEntities;
 import com.vuzz.forgestory.common.items.StoryItems;
 
@@ -47,6 +49,7 @@ public class ForgeStory {
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         ClientRegistry.registerKeyBinding(keyStory);
+        RenderingRegistry.registerEntityRenderingHandler(StoryEntities.NPC.get(), NPCRenderer::new);
         event.enqueueWork(() -> {
         });
     }

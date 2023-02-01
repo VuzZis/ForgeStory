@@ -3,6 +3,10 @@ package com.vuzz.forgestory.common.utils.stories;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import com.vuzz.forgestory.common.utils.js.JSPlayer;
+import com.vuzz.forgestory.common.utils.js.JSScriptFunctions;
+import com.vuzz.forgestory.common.utils.js.JSStory;
+
 public class Action {
     
     public Consumer<Scene> action;
@@ -16,7 +20,12 @@ public class Action {
     }
 
     public void playAction() {
-        action.accept(scene);
+        try {
+            action.accept(scene);
+        } catch(Exception e) {
+            e.printStackTrace();
+            new JSScriptFunctions(new JSStory(scene.story),new JSPlayer(scene.story.player,new JSStory(scene.story))).error(e.getMessage()+" :other");
+        }
     }
 
 }

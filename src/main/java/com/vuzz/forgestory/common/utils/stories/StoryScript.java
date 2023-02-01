@@ -9,9 +9,11 @@ import java.nio.file.Files;
 import org.mozilla.javascript.ClassShutter;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
+import org.mozilla.javascript.LambdaFunction;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.ScriptableObject;
 
+import com.vuzz.forgestory.common.entities.NPCEntity;
 import com.vuzz.forgestory.common.utils.js.JSBlocks;
 import com.vuzz.forgestory.common.utils.js.JSPlayer;
 import com.vuzz.forgestory.common.utils.js.JSScene;
@@ -54,6 +56,7 @@ public class StoryScript {
 
         ScriptableObject.putConstProperty(scope, "story",storyJS);
         ScriptableObject.putConstProperty(scope, "player",playerJS);
+        ScriptableObject.putConstProperty(scope, "world",player.level);
         ScriptableObject.putConstProperty(scope, "blocks", new JSBlocks(player));
         ScriptableObject.putConstProperty(scope, "api", new JSScriptFunctions(storyJS, playerJS));
         ScriptableObject.putConstProperty(scope, "mc", Minecraft.getInstance());
@@ -61,6 +64,12 @@ public class StoryScript {
         ScriptableObject.putConstProperty(scope, "scene", new JSScene(scene));
         ScriptableObject.putConstProperty(scope, "ticker_ticks", GlobalTicker.ticks);
         ScriptableObject.putConstProperty(scope, "ticker_paused", GlobalTicker.paused);
+        ScriptableObject.putConstProperty(scope, "face_def", 0);
+        ScriptableObject.putConstProperty(scope, "face_happy", 1);
+        ScriptableObject.putConstProperty(scope, "face_angry", 2);
+        ScriptableObject.putConstProperty(scope, "face_sad", 3);
+        ScriptableObject.putConstProperty(scope, "face_terrified", 4);
+        ScriptableObject.putConstProperty(scope, "face_smug", 5);
 
         System.out.println("Running script: "+scriptId);
         try {

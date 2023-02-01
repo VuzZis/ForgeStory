@@ -33,19 +33,19 @@ public class JSPlayer {
     }
 
     public void setX(double x) {
-        entity.setPos(x,getY(),getZ());
+        setPos(x,getY(),getZ());
     }
 
     public void setY(double y) {
-        entity.setPos(getX(),y,getZ());
+        setPos(getX(),y,getZ());
     }
 
     public void setZ(double z) {
-        entity.setPos(getX(),getY(),z);
+        setPos(getX(),getY(),z);
     }
 
     public void setPos(double x, double y, double z) {
-        entity.setPos(x, y, z);
+        new JSScriptFunctions(story,this).command("tp "+entity.getDisplayName().getString()+" "+x+" "+y+" "+z);
     }
 
     public double[] getPos() {

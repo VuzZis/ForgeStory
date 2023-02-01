@@ -38,7 +38,7 @@ public class Story {
         reloadScenes();
         sceneTimer = readTimer();
         sceneInQueue = readNextScene();
-        queueScene(sceneInQueue, sceneTimer);
+        queueScene(sceneInQueue, sceneTimer/20);
     }
 
     public void reloadScripts() {
