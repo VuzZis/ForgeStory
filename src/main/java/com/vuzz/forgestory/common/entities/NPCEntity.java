@@ -130,7 +130,7 @@ public class NPCEntity extends MobEntity implements IAnimatable {
     private <E extends IAnimatable> PlayState predicateFace(AnimationEvent<E> event) {
         event.getController().transitionLengthTicks = 3;
         AnimationBuilder face = new AnimationBuilder()
-            .loop(facesAnims[curFace]);
+            .loop(facesAnims[getFace()]);
         event.getController().setAnimation(face);
         return PlayState.CONTINUE;
     }
