@@ -2,6 +2,9 @@ package com.vuzz.forgestory.common.entities;
 
 import java.util.List;
 
+import com.vuzz.forgestory.common.networking.NPCDataPacket;
+import com.vuzz.forgestory.common.networking.Networking;
+
 import net.minecraft.command.arguments.EntityAnchorArgument.Type;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -22,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.PacketDistributor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -81,9 +85,7 @@ public class NPCEntity extends MobEntity implements IAnimatable {
     @Override
     public void tick() {
         super.tick();
-        if(!level.isClientSide) {
-            return;
-        }
+        if(level.isClientSide) return;
         if(hasPlayerAround(15)) {
             PlayerEntity player = getPlayerAround(15);
             if (ticks % 20 == 0) lookAt(Type.EYES,new Vector3d(player.getX(),player.getY(),player.getZ()));
@@ -99,6 +101,7 @@ public class NPCEntity extends MobEntity implements IAnimatable {
                 getNSpeed()
             );
         }
+        if(ticks % 10 == 0) Networking.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), new NPCDataPacket(getFace(),getTexture(),getId()));
         if(immortal) setHealth(20);
         ticks++;
     }
@@ -163,7 +166,9 @@ public class NPCEntity extends MobEntity implements IAnimatable {
         ? texturePath 
         : getPersistentData().getString("texturePath"); 
     }
-    public void setTexture(String text) { getPersistentData().putString("texturePath",text);}
+    public void setTexture(String text) { 
+        getPersistentData().putString("texturePath",text);
+    }
 
     public String getNName() { 
         return 
@@ -182,7 +187,9 @@ public class NPCEntity extends MobEntity implements IAnimatable {
     public void setNSpeed(float speed) { getPersistentData().putFloat("speed", speed);;}
 
     public int getFace() {return getPersistentData().getInt("face");}
-    public void setFace(int face) { getPersistentData().putInt("face", face);;}
+    public void setFace(int face) { 
+        getPersistentData().putInt("face", face);;
+    }
 
     public BlockPos getGoTo() { 
         return new BlockPos(

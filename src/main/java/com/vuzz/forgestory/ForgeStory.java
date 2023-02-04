@@ -8,6 +8,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.settings.IKeyConflictContext;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -18,10 +19,15 @@ import software.bernie.geckolib3.GeckoLib;
 import com.vuzz.forgestory.client.renderers.NPCRenderer;
 import com.vuzz.forgestory.common.entities.StoryEntities;
 import com.vuzz.forgestory.common.items.StoryItems;
+import com.vuzz.forgestory.common.networking.ClientProxy;
+import com.vuzz.forgestory.common.networking.IProxy;
+import com.vuzz.forgestory.common.networking.Networking;
+import com.vuzz.forgestory.common.networking.ServerProxy;
 
 @Mod(ForgeStory.MOD_ID)
 public class ForgeStory {
     public static final String MOD_ID = "forgestory";
+    public static final IProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);;
 
     public static final ItemGroup MOD_TAB = new ItemGroup("forgestory") {
         @Override
@@ -34,7 +40,7 @@ public class ForgeStory {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         register(eventBus);
-
+        Networking.register();
         GeckoLib.initialize();
 
         eventBus.addListener(this::doClientStuff);

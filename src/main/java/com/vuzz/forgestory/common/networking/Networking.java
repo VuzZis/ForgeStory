@@ -14,7 +14,7 @@ public class Networking {
 
     public static void register() {
         CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(VarsUtils.MOD_ID, "network"), () -> "1.0", s -> true, s -> true);
-        CHANNEL.registerMessage(nextID(), PacketItemStack.class, PacketItemStack::toBytes, PacketItemStack::new, PacketItemStack::handle);
+        CHANNEL.registerMessage(nextID(), NPCDataPacket.class, NPCDataPacket::encode, NPCDataPacket::new, NPCDataPacket::handle);
     }
 
 }
