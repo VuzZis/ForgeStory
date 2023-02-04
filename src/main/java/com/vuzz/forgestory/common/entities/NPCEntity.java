@@ -81,6 +81,9 @@ public class NPCEntity extends MobEntity implements IAnimatable {
     @Override
     public void tick() {
         super.tick();
+        if(!level.isClientSide) {
+            return;
+        }
         if(hasPlayerAround(15)) {
             PlayerEntity player = getPlayerAround(15);
             if (ticks % 20 == 0) lookAt(Type.EYES,new Vector3d(player.getX(),player.getY(),player.getZ()));
