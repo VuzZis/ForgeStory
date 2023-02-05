@@ -12,6 +12,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.controller.MovementController;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -19,6 +21,9 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.FlyingPathNavigator;
+import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -46,7 +51,9 @@ public class NPCEntity extends MobEntity implements IAnimatable {
         "animation.npcsteve.angry",
         "animation.npcsteve.sad",
         "animation.npcsteve.terrified",
-        "animation.npcsteve.smug"
+        "animation.npcsteve.smug",
+        "animation.npcsteve.eyebrow_raise",
+        "animation.npcsteve.gasp"
     };
 
     public final String texturePath = "forgestory:textures/entity/npc.png";
@@ -101,6 +108,8 @@ public class NPCEntity extends MobEntity implements IAnimatable {
                 getNSpeed()
             );
         }
+        ((GroundPathNavigator) getNavigation()).setCanOpenDoors(true);
+        ((GroundPathNavigator) getNavigation()).setCanFloat(true);
         if(ticks % 10 == 0) Networking.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), new NPCDataPacket(getFace(),getTexture(),getId()));
         if(immortal) setHealth(20);
         ticks++;
@@ -133,6 +142,11 @@ public class NPCEntity extends MobEntity implements IAnimatable {
             .loop(facesAnims[getFace()]);
         event.getController().setAnimation(face);
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected GroundPathNavigator createNavigation(World world) {
+        return new GroundPathNavigator(this, world);
     }
 
     @Override

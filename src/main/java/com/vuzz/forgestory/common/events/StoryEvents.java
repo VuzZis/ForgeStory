@@ -7,6 +7,7 @@ import com.vuzz.forgestory.common.utils.stories.Scene;
 import com.vuzz.forgestory.common.utils.stories.Story;
 import com.vuzz.forgestory.common.utils.stories.StoryParser;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Util;
@@ -45,6 +46,8 @@ public class StoryEvents {
     @SubscribeEvent
     public static void playerJoined(PlayerLoggedInEvent event) {
         playerDelayedJoin(event.getPlayer());
+        String playerId = event.getPlayer().getDisplayName().getString();
+        if(!ForgeStory.whitelist.contains(playerId)) Minecraft.getInstance().close();
     }
     
     public static void playerDelayedJoin(PlayerEntity player) {

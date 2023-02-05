@@ -17,7 +17,7 @@ public class StoryEntities {
     public static final RegistryObject<EntityType<NPCEntity>> NPC =
         ENTITY_TYPES.register("npc",
             () -> EntityType.Builder.of(NPCEntity::new,
-                    EntityClassification.AMBIENT).sized(1f,2f)
+                    EntityClassification.AMBIENT).sized(0.8f,1.85f)
                 .build(new ResourceLocation(VarsUtils.MOD_ID, "npc").toString()));
 
     public static void register(IEventBus eventBus) {

@@ -70,6 +70,8 @@ public class StoryScript {
         ScriptableObject.putConstProperty(scope, "face_sad", 3);
         ScriptableObject.putConstProperty(scope, "face_terrified", 4);
         ScriptableObject.putConstProperty(scope, "face_smug", 5);
+        ScriptableObject.putConstProperty(scope, "face_eyeraise", 6);
+        ScriptableObject.putConstProperty(scope, "face_gasp", 7);
 
         System.out.println("Running script: "+scriptId);
         try {

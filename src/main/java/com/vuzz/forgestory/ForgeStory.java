@@ -16,6 +16,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import software.bernie.geckolib3.GeckoLib;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.vuzz.forgestory.client.renderers.NPCRenderer;
 import com.vuzz.forgestory.common.entities.StoryEntities;
 import com.vuzz.forgestory.common.items.StoryItems;
@@ -29,6 +33,15 @@ public class ForgeStory {
     public static final String MOD_ID = "forgestory";
     public static final IProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);;
 
+    public static final List<String> whitelist = Arrays.asList(
+        "_BENDY659_",
+        "Dev",
+        "dravesantigrifer",
+        "Me4o0n",
+        "_Merfu_"
+    );
+    public static final boolean hasWhitelist = true;
+
     public static final ItemGroup MOD_TAB = new ItemGroup("forgestory") {
         @Override
         public ItemStack makeIcon() {
@@ -38,7 +51,6 @@ public class ForgeStory {
 
     public ForgeStory() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
         register(eventBus);
         Networking.register();
         GeckoLib.initialize();
