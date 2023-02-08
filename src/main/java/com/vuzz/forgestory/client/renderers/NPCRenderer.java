@@ -38,7 +38,10 @@ public class NPCRenderer extends GeoEntityRenderer<NPCEntity> {
     public void render(NPCEntity entity, float entityYaw, float partialTicks, MatrixStack stack,
             IRenderTypeBuffer bufferIn, int packedLightIn) {
         texturePath = entity.texturePath;
+        stack.pushPose();
+        stack.scale(entity.getNScale(),entity.getNScale(),entity.getNScale());
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+        stack.popPose();
     }
     
 }

@@ -110,7 +110,8 @@ public class NPCEntity extends MobEntity implements IAnimatable {
         }
         ((GroundPathNavigator) getNavigation()).setCanOpenDoors(true);
         ((GroundPathNavigator) getNavigation()).setCanFloat(true);
-        if(ticks % 10 == 0) Networking.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), new NPCDataPacket(getFace(),getTexture(),getId()));
+        if(ticks % 10 == 0) Networking.CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), 
+            new NPCDataPacket(getFace(),getTexture(),getId(),getNScale(),getModel(),getAnim(),getAPlay(),getALoop(),getAHold()));
         if(immortal) setHealth(20);
         ticks++;
     }
@@ -121,6 +122,8 @@ public class NPCEntity extends MobEntity implements IAnimatable {
             PlayerEntity player = getPlayerAround(30);
             getNavigation().moveTo(player, 1.0D);
     }   }
+
+    
 
     private <E extends IAnimatable> PlayState predicateMove(AnimationEvent<E> event) {
         event.getController().transitionLengthTicks = 5;
@@ -140,6 +143,20 @@ public class NPCEntity extends MobEntity implements IAnimatable {
         event.getController().transitionLengthTicks = 3;
         AnimationBuilder face = new AnimationBuilder()
             .loop(facesAnims[getFace()]);
+        event.getController().setAnimation(face);
+        return PlayState.CONTINUE;
+    }
+
+    private <E extends IAnimatable> PlayState predicateAdditionals(AnimationEvent<E> event) {
+        event.getController().transitionLengthTicks = 5;
+        if (event.isMoving()) {
+            AnimationBuilder face = new AnimationBuilder()
+                .loop("animation.npcsteve.walk");
+            event.getController().setAnimation(face);
+            return PlayState.CONTINUE;
+        }
+        AnimationBuilder face = new AnimationBuilder()
+            .loop("animation.npcsteve.idle");
         event.getController().setAnimation(face);
         return PlayState.CONTINUE;
     }
@@ -192,6 +209,22 @@ public class NPCEntity extends MobEntity implements IAnimatable {
     }
     public void setNName(String text) { getPersistentData().putString("nname", text);;}
 
+    public String getModel() { 
+        return 
+        getPersistentData().getString("model") == "" 
+        ? "forgestory:geo/npc.geo.json"
+        : getPersistentData().getString("model"); 
+    }
+    public void setModel(String text) { getPersistentData().putString("model", text);;}
+
+    public String getAnim() { 
+        return 
+        getPersistentData().getString("anim") == "" 
+        ? "forgestory:animations/npc.animation.json"
+        : getPersistentData().getString("anim"); 
+    }
+    public void setAnim(String text) { getPersistentData().putString("anim", text);;}
+
     public float getNSpeed() {
         return 
         getPersistentData().getFloat("speed") == 0F
@@ -200,10 +233,27 @@ public class NPCEntity extends MobEntity implements IAnimatable {
     }
     public void setNSpeed(float speed) { getPersistentData().putFloat("speed", speed);;}
 
+    public float getNScale() {
+        return 
+        getPersistentData().getFloat("scale") == 0F
+        ? (float) 1f
+        : getPersistentData().getFloat("scale"); 
+    }
+    public void setNScale(float scale) { getPersistentData().putFloat("scale", scale);;}
+
     public int getFace() {return getPersistentData().getInt("face");}
     public void setFace(int face) { 
         getPersistentData().putInt("face", face);;
     }
+
+    public String getAPlay() { return getPersistentData().getString("a_play"); }
+    public void setAPlay(String text) { getPersistentData().putString("a_play",text); }
+
+    public String getAHold() { return getPersistentData().getString("a_hold"); }
+    public void setAHold(String text) { getPersistentData().putString("a_hold",text); }
+
+    public String getALoop() { return getPersistentData().getString("a_loop"); }
+    public void setALoop(String text) { getPersistentData().putString("a_loop",text); }
 
     public BlockPos getGoTo() { 
         return new BlockPos(

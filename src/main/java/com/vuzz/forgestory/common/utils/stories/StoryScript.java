@@ -11,9 +11,11 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.LambdaFunction;
 import org.mozilla.javascript.Script;
+import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 import com.vuzz.forgestory.common.entities.NPCEntity;
+import com.vuzz.forgestory.common.utils.VarsUtils;
 import com.vuzz.forgestory.common.utils.js.JSBlocks;
 import com.vuzz.forgestory.common.utils.js.JSPlayer;
 import com.vuzz.forgestory.common.utils.js.JSScene;
@@ -45,7 +47,7 @@ public class StoryScript {
     private boolean tickBroken = false;
     private boolean defaultBroken = false;
 
-    public void runScript(ServerPlayerEntity player,Scene scene) {
+    public void runScript(ServerPlayerEntity player,Scene scene) throws InstantiationException, IllegalAccessException {
         if(defaultBroken) return;
         ctx = Context.enter();
         this.player = player;
@@ -72,7 +74,8 @@ public class StoryScript {
         ScriptableObject.putConstProperty(scope, "face_smug", 5);
         ScriptableObject.putConstProperty(scope, "face_eyeraise", 6);
         ScriptableObject.putConstProperty(scope, "face_gasp", 7);
-
+        ScriptableObject.putProperty(scope, "tick", Function.NOT_FOUND);
+        ScriptableObject.putProperty(scope, "utils", VarsUtils.class.newInstance());
         System.out.println("Running script: "+scriptId);
         try {
             BufferedReader reader = Files.newBufferedReader(scriptCode.toPath(), StandardCharsets.UTF_8);

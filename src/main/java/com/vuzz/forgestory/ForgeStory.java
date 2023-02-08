@@ -34,11 +34,21 @@ public class ForgeStory {
     public static final IProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);;
 
     public static final List<String> whitelist = Arrays.asList(
-        "_BENDY659_",
         "Dev",
         "dravesantigrifer",
         "Me4o0n",
-        "_Merfu_"
+        "HunterKsen",
+        "LaDDep",
+        "Terak356",
+        "Merfusha",
+        "KoteykaTheCat",
+        "grafikthefox",
+        "Sirnik145",
+        "_BENDY659_",
+        "_Fedya72",
+        "RedyTV1310",
+        "OnixTheCat",
+        "pet_bol"
     );
     public static final boolean hasWhitelist = true;
 

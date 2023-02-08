@@ -8,12 +8,14 @@ import com.vuzz.forgestory.common.utils.stories.Story;
 import com.vuzz.forgestory.common.utils.stories.StoryParser;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -43,6 +45,14 @@ public class StoryEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onEntityKill(LivingDeathEvent event) {
+        if(event.getEntity().level.isClientSide) return;
+        Entity killer = event.getSource().getDirectEntity();
+        if(!(killer != null && killer instanceof PlayerEntity)) return;
+        VarsUtils.lastKilledEntity = event.getEntity();
+    }
+    
     @SubscribeEvent
     public static void playerJoined(PlayerLoggedInEvent event) {
         playerDelayedJoin(event.getPlayer());

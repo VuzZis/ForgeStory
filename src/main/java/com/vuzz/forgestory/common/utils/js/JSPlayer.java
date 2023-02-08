@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.server.ServerWorld;
 
 public class JSPlayer {
     
@@ -45,7 +46,11 @@ public class JSPlayer {
     }
 
     public void setPos(double x, double y, double z) {
-        new JSScriptFunctions(story,this).command("tp "+entity.getDisplayName().getString()+" "+x+" "+y+" "+z);
+        entity.teleportTo(x, y, z);
+    }
+
+    public void setRotation(float pitch, float yaw) {
+        entity.teleportTo((ServerWorld) entity.level, getX(),getY(),getZ(), pitch,yaw);
     }
 
     public double[] getPos() {

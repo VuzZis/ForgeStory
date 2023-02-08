@@ -30,6 +30,7 @@ import com.vuzz.forgestory.common.utils.js.JSScriptFunctions;
 import com.vuzz.forgestory.common.utils.js.JSStory;
 import com.vuzz.forgestory.common.utils.js.SceneData;
 
+import net.minecraft.client.gui.spectator.PlayerMenuObject;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -61,14 +62,17 @@ public class Scene {
         this.story = story;
     }
 
-    public void createNpc(World world, String id, String name, String texture, double[] pos) {
+    public void createNpc(World world, String id, String name, String texture, double[] pos, float scale, String model, String anim) {
         EntityType<NPCEntity>npc = StoryEntities.NPC.get();
         NPCEntity npcEntity = (NPCEntity) npc.spawn((ServerWorld) world, ItemStack.EMPTY, null, new BlockPos(pos[0],pos[1],pos[2]), 
             SpawnReason.DISPENSER, false, false);
         if(npcEntity == null) return;
         npcEntity.setTexture(texture);
         npcEntity.setNName(name);
+        npcEntity.setNScale(scale);
         npcEntity.setGoTo(new BlockPos(pos[0],pos[1],pos[2]));
+        npcEntity.setModel(model);
+        npcEntity.setAnim(anim);
         localNpcs.put(id,new JSNpc(npcEntity));
     }
 
@@ -119,7 +123,11 @@ public class Scene {
         StoryScript sscript = story.getScript(script);
         if(sscript != null) {
             sscript.ticks = 0;
-            sscript.runScript(player, this);
+            try {
+                sscript.runScript(player, this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             loadedScripts.add(sscript);
         }
     }
@@ -161,7 +169,12 @@ public class Scene {
 
     }
 
+    public boolean playerLocked = false;
+    public double[] lastPlayerPos = new double[] {0,0,0};
+    public float[] lastPlayerRot = new float[] {0,0};
+
     public void end() {
+        invalidateScripts();
         story.activeScenes.set(index,null);
     }
 
@@ -200,6 +213,14 @@ public class Scene {
                 String sceneId = (String) data.get("sceneId");
                 addAction((e) -> story.queueScene(sceneId, delayedBy), breakA);
             break;
+            case "black_screen":
+                double isblack = (double) data.get("value");
+                addAction((e) -> func.blackScreen((int) Math.round(isblack)),breakA);
+            break;
+            case "hide_gui":
+                boolean ishid = (boolean) data.get("value");
+                addAction((e) -> func.hideGui(ishid),breakA);
+            break;
             case "end":
                 addAction((e) -> this.end(),breakA);
             break;
@@ -217,7 +238,19 @@ public class Scene {
         }
     }
 
+    public void setPlayerRotation(float pitch, float yaw) {
+        JSPlayer playerJS = new JSPlayer(player, new JSStory(story));
+        playerJS.setRotation(pitch, yaw);
+        lastPlayerRot = new float[] {pitch,yaw};
+    }
+
     public void tick() {
+        JSPlayer playerJS = new JSPlayer(player, new JSStory(story));
+        if(playerLocked) {
+            playerJS.setPos(lastPlayerPos[0],lastPlayerPos[1],lastPlayerPos[2]);
+            playerJS.setRotation(lastPlayerRot[0],lastPlayerRot[1]);
+        }
+
         for (StoryScript storyScript : loadedScripts) {
             if(storyScript != null) storyScript.tick();
         }
