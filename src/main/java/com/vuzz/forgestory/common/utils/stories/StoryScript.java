@@ -17,6 +17,7 @@ import org.mozilla.javascript.ScriptableObject;
 import com.vuzz.forgestory.common.entities.NPCEntity;
 import com.vuzz.forgestory.common.utils.VarsUtils;
 import com.vuzz.forgestory.common.utils.js.JSBlocks;
+import com.vuzz.forgestory.common.utils.js.JSLibrary;
 import com.vuzz.forgestory.common.utils.js.JSPlayer;
 import com.vuzz.forgestory.common.utils.js.JSScene;
 import com.vuzz.forgestory.common.utils.js.JSScriptFunctions;
@@ -78,6 +79,7 @@ public class StoryScript {
         ScriptableObject.putProperty(scope, "utils", VarsUtils.class.newInstance());
         System.out.println("Running script: "+scriptId);
         try {
+            runLibraries();
             BufferedReader reader = Files.newBufferedReader(scriptCode.toPath(), StandardCharsets.UTF_8);
             ctx.evaluateReader(scope, reader, "a",1,null);
         
@@ -85,6 +87,21 @@ public class StoryScript {
             e.printStackTrace();
             defaultBroken = true;
             new JSScriptFunctions(storyJS,playerJS).error(e.getMessage()+" :other");
+        }
+    }
+
+    public void runLibraries() {
+        JSStory storyJS = new JSStory(story);
+        JSPlayer playerJS = new JSPlayer(player,storyJS);
+        for(JSLibrary lib : story.storyLibs) {
+            try {
+                BufferedReader reader = Files.newBufferedReader(lib.scriptLib.toPath(), StandardCharsets.UTF_8);
+                ctx.evaluateReader(scope, reader, "a",1,null);
+            } catch(Exception e) {
+                e.printStackTrace();
+                defaultBroken = true;
+                new JSScriptFunctions(storyJS,playerJS).error(e.getMessage()+" :lib/"+lib.scriptLib.getName());
+            }
         }
     }
 

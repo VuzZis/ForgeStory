@@ -87,6 +87,7 @@ public class NPCEntity extends MobEntity implements IAnimatable {
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController(this,"controller",5,this::predicateMove));
         data.addAnimationController(new AnimationController(this,"faces",5,this::predicateFace));
+        data.addAnimationController(new AnimationController(this,"adds",5,this::predicateAdditionals));
     }
 
     @Override
@@ -149,14 +150,13 @@ public class NPCEntity extends MobEntity implements IAnimatable {
 
     private <E extends IAnimatable> PlayState predicateAdditionals(AnimationEvent<E> event) {
         event.getController().transitionLengthTicks = 5;
-        if (event.isMoving()) {
-            AnimationBuilder face = new AnimationBuilder()
-                .loop("animation.npcsteve.walk");
-            event.getController().setAnimation(face);
-            return PlayState.CONTINUE;
+        AnimationBuilder face = new AnimationBuilder();
+        if(!getAPlay().equals("")) {
+            face.playOnce(getAPlay());
         }
-        AnimationBuilder face = new AnimationBuilder()
-            .loop("animation.npcsteve.idle");
+        if(!getALoop().equals("")) {
+            face.loop(getALoop());
+        }
         event.getController().setAnimation(face);
         return PlayState.CONTINUE;
     }

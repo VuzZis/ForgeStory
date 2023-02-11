@@ -30,7 +30,7 @@ public class NPCModel extends AnimatedGeoModel<NPCEntity> {
             modId = id.substring(0,id.indexOf(":"));
         }
         name = id.substring(id.indexOf(":")+1);
-        return new ResourceLocation(modId,name+(name.endsWith(".png") ? "" : ".png"));
+        return new ResourceLocation(modId,name+(name.endsWith(".json") ? "" : ".json"));
     }
     
 }

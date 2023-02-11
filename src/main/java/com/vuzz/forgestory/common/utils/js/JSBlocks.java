@@ -8,7 +8,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.StringTextComponent;
 
-public class JSBlocks {
+public class JSBlocks implements JSElement {
     
     public ServerPlayerEntity player;
 

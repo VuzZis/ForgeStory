@@ -1,0 +1,99 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.npcstevenpc",
+				"texture_width": 128,
+				"texture_height": 64,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "Head",
+					"pivot": [0, 12, 0],
+					"cubes": [
+						{"origin": [-4, 12, -4], "size": [8, 8, 8], "uv": [0, 0]},
+						{"origin": [-4, 12, -4], "size": [8, 8, 8], "inflate": 0.5, "uv": [32, 0]}
+					]
+				},
+				{
+					"name": "Eyes",
+					"parent": "Head",
+					"pivot": [0, -12, 0]
+				},
+				{
+					"name": "LBgEye",
+					"parent": "Eyes",
+					"pivot": [-2, 15, -3.52],
+					"cubes": [
+						{"origin": [-3, 14, -4.02], "size": [2, 2, 1], "uv": [122, 61]}
+					]
+				},
+				{
+					"name": "LEye",
+					"parent": "LBgEye",
+					"pivot": [-1.5, 15, -3.53],
+					"cubes": [
+						{"origin": [-2, 14, -4.03], "size": [1, 2, 1], "uv": [124, 0]}
+					]
+				},
+				{
+					"name": "RBgEye",
+					"parent": "Eyes",
+					"pivot": [2, 15, -3.52],
+					"cubes": [
+						{"origin": [1, 14, -4.02], "size": [2, 2, 1], "uv": [122, 61]}
+					]
+				},
+				{
+					"name": "REye",
+					"parent": "RBgEye",
+					"pivot": [1.5, 15, -3.53],
+					"cubes": [
+						{"origin": [1, 14, -4.03], "size": [1, 2, 1], "uv": [124, 0]}
+					]
+				},
+				{
+					"name": "Brows",
+					"parent": "Head",
+					"pivot": [0, -12, 0]
+				},
+				{
+					"name": "LBrow",
+					"parent": "Brows",
+					"pivot": [-2.5, 16, -4.1],
+					"cubes": [
+						{"origin": [-4, 15, -4.1], "size": [3, 2, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "RBrow",
+					"parent": "Brows",
+					"pivot": [2.5, 16, -4.1],
+					"cubes": [
+						{"origin": [1, 15, -4.1], "size": [3, 2, 0], "uv": [0, 3]}
+					]
+				},
+				{
+					"name": "RightLeg",
+					"pivot": [-1.9, 12, 0],
+					"cubes": [
+						{"origin": [-3.9, 0, -2], "size": [4, 12, 4], "uv": [0, 16]},
+						{"origin": [-3.9, 0, -2], "size": [4, 12, 4], "inflate": 0.25, "uv": [0, 32]}
+					]
+				},
+				{
+					"name": "LeftLeg",
+					"pivot": [1.9, 12, 0],
+					"cubes": [
+						{"origin": [-0.1, 0, -2], "size": [4, 12, 4], "uv": [16, 48]},
+						{"origin": [-0.1, 0, -2], "size": [4, 12, 4], "inflate": 0.25, "uv": [0, 48]}
+					]
+				}
+			]
+		}
+	]
+}

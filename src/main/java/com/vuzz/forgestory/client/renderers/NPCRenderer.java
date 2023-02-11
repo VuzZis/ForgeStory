@@ -40,6 +40,7 @@ public class NPCRenderer extends GeoEntityRenderer<NPCEntity> {
         texturePath = entity.texturePath;
         stack.pushPose();
         stack.scale(entity.getNScale(),entity.getNScale(),entity.getNScale());
+        this.shadowRadius = 0.5f*entity.getNScale();
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
         stack.popPose();
     }

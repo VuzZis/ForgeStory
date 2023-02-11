@@ -8,7 +8,7 @@ import com.vuzz.forgestory.common.utils.stories.Scene;
 
 import net.minecraft.world.World;
 
-public class JSScene {
+public class JSScene implements JSElement {
     public final Scene scene;
     public JSScene(Scene scene) {
         this.scene = scene;
@@ -41,6 +41,14 @@ public class JSScene {
 
     public void createNpc(World world, String id, String name, String texture, double[] pos, float scale,String model,String anim) {
         scene.createNpc(world, id, name, texture, pos,scale,model,anim);
+    }
+
+    public void createNpc(World world, String id, String name, String texture, double[] pos, float scale) {
+        scene.createNpc(world, id, name, texture, pos,scale,"forgestory:geo/npc.geo","forgestory:animations/npc.animation");
+    }
+
+    public void createNpc(World world, String id, String name, String texture, double[] pos) {
+        scene.createNpc(world, id, name, texture, pos,1,"forgestory:geo/npc.geo","forgestory:animations/npc.animation");
     }
 
     public JSNpc getNpc(String id) {

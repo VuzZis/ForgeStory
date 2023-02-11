@@ -4,7 +4,7 @@ import com.vuzz.forgestory.common.entities.NPCEntity;
 
 import net.minecraft.util.math.BlockPos;
 
-public class JSNpc {
+public class JSNpc implements JSElement {
 
     public NPCEntity entity;
     
@@ -23,6 +23,14 @@ public class JSNpc {
 
     public void face(int face) {
         entity.setFace(face);
+    }
+
+    public void playAnimOnce(String anim) {
+        entity.setAPlay(anim);
+    }
+
+    public void playAnimLooped(String anim) {
+        entity.setALoop(anim);
     }
 
     

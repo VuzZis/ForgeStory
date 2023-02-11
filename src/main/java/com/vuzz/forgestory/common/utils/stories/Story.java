@@ -10,6 +10,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.google.gson.Gson;
+import com.vuzz.forgestory.common.utils.js.JSLibrary;
 import com.vuzz.forgestory.common.utils.js.StoryData;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -19,6 +20,7 @@ public class Story {
     public String storyId = "";
     public File storyFile;
     public List<StoryScript> storyScripts = new ArrayList<>();
+    public List<JSLibrary> storyLibs = new ArrayList<>();
     public List<Scene> storyScenes = new ArrayList<>();
 
     public List<Scene> activeScenes = new ArrayList<>();
@@ -34,6 +36,7 @@ public class Story {
         storyId = id;
         storyFile = file;
         this.player = player;
+        reloadLibraries();
         reloadScripts();
         reloadScenes();
         sceneTimer = readTimer();
@@ -50,6 +53,18 @@ public class Story {
         for(File script: scripts) {
             System.out.println("Found Script: "+script.getName());
             parseScript(script);
+        }
+    }
+
+    public void reloadLibraries() {
+        System.out.println("Loading libraries..");
+        storyLibs.clear();
+        File libsFolder = new File(storyFile,"libs");
+        libsFolder.mkdir();
+        File[] libs = libsFolder.listFiles(StoryParser.jsFilter);
+        for(File lib: libs) {
+            System.out.println("Found Lib: "+lib.getName());
+            parseLib(lib);
         }
     }
 
@@ -167,6 +182,11 @@ public class Story {
     public void parseScript(File script) {
         StoryScript storyScript = new StoryScript(script.getName(),script,this);
         storyScripts.add(storyScript);
+    }
+
+    public void parseLib(File script) {
+        JSLibrary lib = new JSLibrary(script);
+        storyLibs.add(lib);
     }
 
     public void parseScene(File scene) {

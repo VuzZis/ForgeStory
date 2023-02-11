@@ -48,7 +48,8 @@ public class ForgeStory {
         "_Fedya72",
         "RedyTV1310",
         "OnixTheCat",
-        "pet_bol"
+        "pet_bol",
+        "hikita210"
     );
     public static final boolean hasWhitelist = true;
 

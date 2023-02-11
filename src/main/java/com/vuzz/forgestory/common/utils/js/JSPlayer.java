@@ -12,7 +12,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.server.ServerWorld;
 
-public class JSPlayer {
+public class JSPlayer implements JSElement {
     
     public final ServerPlayerEntity entity;
     public final JSStory story;

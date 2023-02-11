@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.vuzz.forgestory.common.utils.stories.Story;
 
-public class JSStory {
+public class JSStory implements JSElement {
     
     public final Story story;
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();

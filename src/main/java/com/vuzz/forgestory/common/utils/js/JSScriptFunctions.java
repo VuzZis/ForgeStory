@@ -17,7 +17,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class JSScriptFunctions {
+public class JSScriptFunctions implements JSElement {
     
     public final JSStory story;
     public final JSPlayer player;

@@ -88,6 +88,10 @@ public class Scene {
         localNpcs.remove(id,npc);
     }
 
+    public void invalidateNpcs() {
+        localNpcs.forEach((e,npc) -> npc.entity.remove());
+    }
+
     public void construct() {
         try {
             BufferedReader reader = Files.newBufferedReader(sceneFile.toPath(), StandardCharsets.UTF_8);
@@ -175,6 +179,7 @@ public class Scene {
 
     public void end() {
         invalidateScripts();
+        invalidateNpcs();
         story.activeScenes.set(index,null);
     }
 
