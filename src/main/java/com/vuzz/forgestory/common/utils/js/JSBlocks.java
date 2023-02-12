@@ -1,9 +1,5 @@
 package com.vuzz.forgestory.common.utils.js;
 
-import java.util.UUID;
-
-import com.vuzz.forgestory.common.utils.stories.GlobalTicker;
-
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.StringTextComponent;

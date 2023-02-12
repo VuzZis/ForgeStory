@@ -1,12 +1,9 @@
 package com.vuzz.forgestory;
 
-import net.minecraft.client.gui.widget.list.KeyBindingList;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.settings.IKeyConflictContext;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -16,7 +13,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import software.bernie.geckolib3.GeckoLib;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -82,10 +78,5 @@ public class ForgeStory {
         event.enqueueWork(() -> {
         });
     }
-
-    private void clientSetup(final FMLClientSetupEvent event) {
-
-    }
-
 
 }

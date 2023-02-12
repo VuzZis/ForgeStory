@@ -11,6 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("all")
 public class StoryItems {
 
     private static String MOD_ID = VarsUtils.MOD_ID;

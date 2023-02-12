@@ -19,7 +19,6 @@ import javax.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.vuzz.forgestory.common.utils.js.StoryData;
 import com.vuzz.forgestory.common.utils.js.WorldStoriesData;
 
 public class StoryParser {

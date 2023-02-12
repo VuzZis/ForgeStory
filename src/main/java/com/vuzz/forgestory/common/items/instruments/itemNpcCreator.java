@@ -2,12 +2,9 @@ package com.vuzz.forgestory.common.items.instruments;
 
 import com.vuzz.forgestory.common.items.CustomItem;
 import com.vuzz.forgestory.common.utils.VarsUtils;
-import com.vuzz.forgestory.common.utils.stories.GlobalTicker;
 import com.vuzz.forgestory.common.utils.stories.Scene;
 import com.vuzz.forgestory.common.utils.stories.Story;
 import com.vuzz.forgestory.common.utils.stories.StoryParser;
-import com.vuzz.forgestory.common.utils.stories.StoryScript;
-
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

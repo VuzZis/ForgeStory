@@ -162,6 +162,7 @@ public class Story {
         setNextScene(scene);
     }
 
+    @SuppressWarnings("unused")
     public void reloadScenes() {
         int i = 0;
         for(Scene scene: activeScenes) {

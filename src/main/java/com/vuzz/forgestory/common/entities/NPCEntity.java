@@ -12,18 +12,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -39,6 +31,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+@SuppressWarnings("all")
 public class NPCEntity extends MobEntity implements IAnimatable {
 
     private AnimationFactory anFactory = new AnimationFactory(this);
@@ -85,9 +78,9 @@ public class NPCEntity extends MobEntity implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this,"controller",5,this::predicateMove));
-        data.addAnimationController(new AnimationController(this,"faces",5,this::predicateFace));
-        data.addAnimationController(new AnimationController(this,"adds",5,this::predicateAdditionals));
+        data.addAnimationController(new AnimationController<>(this,"controller",5,this::predicateMove));
+        data.addAnimationController(new AnimationController<>(this,"faces",5,this::predicateFace));
+        data.addAnimationController(new AnimationController<>(this,"adds",5,this::predicateAdditionals));
     }
 
     @Override

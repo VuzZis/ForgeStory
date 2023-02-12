@@ -2,19 +2,13 @@ package com.vuzz.forgestory.common.utils.stories;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-import org.mozilla.javascript.ClassShutter;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
-import org.mozilla.javascript.LambdaFunction;
-import org.mozilla.javascript.Script;
-import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
-import com.vuzz.forgestory.common.entities.NPCEntity;
 import com.vuzz.forgestory.common.utils.VarsUtils;
 import com.vuzz.forgestory.common.utils.js.JSBlocks;
 import com.vuzz.forgestory.common.utils.js.JSLibrary;
@@ -25,7 +19,6 @@ import com.vuzz.forgestory.common.utils.js.JSStory;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.common.ForgeConfig.Client;
 
 public class StoryScript {
 

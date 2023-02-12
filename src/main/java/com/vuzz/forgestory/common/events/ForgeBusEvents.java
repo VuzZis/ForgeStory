@@ -5,13 +5,13 @@ import com.vuzz.forgestory.client.renderers.RenderTest;
 import com.vuzz.forgestory.common.utils.VarsUtils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 @Mod.EventBusSubscriber(modid = ForgeStory.MOD_ID, bus = Bus.FORGE)
+@SuppressWarnings("unused")
 public class ForgeBusEvents {
 
     @SubscribeEvent

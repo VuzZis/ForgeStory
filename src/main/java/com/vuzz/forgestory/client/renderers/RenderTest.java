@@ -24,6 +24,7 @@ public class RenderTest extends IngameGui{
 	    screenHeight = minecraft.getWindow().getGuiScaledHeight();
 	}
 	
+	@SuppressWarnings("all")
 	public void renderTestPumpkin(Minecraft minecraft) {
 		RenderSystem.disableDepthTest();
 		RenderSystem.enableBlend();

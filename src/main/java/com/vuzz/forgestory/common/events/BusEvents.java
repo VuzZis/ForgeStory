@@ -1,12 +1,9 @@
 package com.vuzz.forgestory.common.events;
 
 import com.vuzz.forgestory.ForgeStory;
-import com.vuzz.forgestory.client.renderers.RenderTest;
 import com.vuzz.forgestory.common.entities.NPCEntity;
 import com.vuzz.forgestory.common.entities.StoryEntities;
 
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

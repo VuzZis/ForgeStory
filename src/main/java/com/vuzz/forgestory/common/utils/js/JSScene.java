@@ -1,6 +1,5 @@
 package com.vuzz.forgestory.common.utils.js;
 
-import java.util.Iterator;
 import java.util.function.Consumer;
 
 import com.vuzz.forgestory.common.utils.stories.GlobalTicker;

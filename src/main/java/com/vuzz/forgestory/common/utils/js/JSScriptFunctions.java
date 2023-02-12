@@ -2,7 +2,6 @@ package com.vuzz.forgestory.common.utils.js;
 
 import com.vuzz.forgestory.common.utils.VarsUtils;
 import com.vuzz.forgestory.common.utils.stories.Scene;
-import com.vuzz.forgestory.common.utils.stories.Story;
 import com.vuzz.forgestory.common.utils.stories.StoryScript;
 
 import net.minecraft.block.Block;
@@ -35,7 +34,6 @@ public class JSScriptFunctions implements JSElement {
             try {
                 script.runScript(player.entity,scene);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             return;
@@ -64,6 +62,7 @@ public class JSScriptFunctions implements JSElement {
 
     public void command(String command) {
         MinecraftServer server = player.entity.level.getServer();
+        if(server == null) return;
         server.getCommands().performCommand(server.createCommandSourceStack(), command);
     }
 

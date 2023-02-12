@@ -1,8 +1,6 @@
 package com.vuzz.forgestory.common.utils.stories;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
-
 import com.vuzz.forgestory.common.utils.js.JSPlayer;
 import com.vuzz.forgestory.common.utils.js.JSScriptFunctions;
 import com.vuzz.forgestory.common.utils.js.JSStory;

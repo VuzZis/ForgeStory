@@ -8,6 +8,7 @@ import com.vuzz.forgestory.common.entities.NPCEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+@SuppressWarnings("all")
 public class NPCDataPacket {
     public int face;
     public String texture;

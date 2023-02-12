@@ -11,8 +11,6 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class NPCRenderer extends GeoEntityRenderer<NPCEntity> {
 
-    private String texturePath = "forgestory:textures/entity/npc";
-
     public NPCRenderer(EntityRendererManager renderManager) {
         super(renderManager,new NPCModel());
         this.shadowRadius = 0.5f;
@@ -37,7 +35,6 @@ public class NPCRenderer extends GeoEntityRenderer<NPCEntity> {
     @Override
     public void render(NPCEntity entity, float entityYaw, float partialTicks, MatrixStack stack,
             IRenderTypeBuffer bufferIn, int packedLightIn) {
-        texturePath = entity.texturePath;
         stack.pushPose();
         stack.scale(entity.getNScale(),entity.getNScale(),entity.getNScale());
         this.shadowRadius = 0.5f*entity.getNScale();

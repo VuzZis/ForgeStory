@@ -22,7 +22,6 @@ import net.minecraftforge.event.TickEvent.WorldTickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 @Mod.EventBusSubscriber(modid = ForgeStory.MOD_ID)
 public class StoryEvents {
