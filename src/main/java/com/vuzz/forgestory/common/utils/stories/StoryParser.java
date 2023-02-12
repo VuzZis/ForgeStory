@@ -54,6 +54,10 @@ public class StoryParser {
         player = playerA;
     }
 
+    public static boolean hasStory(String story) {
+        return getStory(story) != null;
+    }
+
     public static void setCurStory(String story, ServerPlayerEntity player) {
         Path folderPath = Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer()).getWorldPath(FolderName.ROOT);
         File folderFile = folderPath.toFile();
@@ -115,7 +119,7 @@ public class StoryParser {
             if(story == null) continue;
             if(story.storyId.equals(id)) return story;
         }
-        System.out.println(id+" not found!");
+        if(id != "") System.out.println(id+" not found!");
         return null;
     }
 

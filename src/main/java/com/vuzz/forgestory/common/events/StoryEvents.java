@@ -1,6 +1,7 @@
 package com.vuzz.forgestory.common.events;
 
 import com.vuzz.forgestory.ForgeStory;
+import com.vuzz.forgestory.common.commands.GeneralCommand;
 import com.vuzz.forgestory.common.utils.VarsUtils;
 import com.vuzz.forgestory.common.utils.stories.GlobalTicker;
 import com.vuzz.forgestory.common.utils.stories.Scene;
@@ -13,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -29,6 +31,11 @@ public class StoryEvents {
     public static void onTickEvent(WorldTickEvent event) {
         if(event.world.isClientSide) return;
         GlobalTicker.tick();
+    }
+
+    @SubscribeEvent
+    public static void onCommandsReg(RegisterCommandsEvent event) {
+        GeneralCommand.register(event.getDispatcher());
     }
 
     @SubscribeEvent
